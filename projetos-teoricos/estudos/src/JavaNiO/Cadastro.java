@@ -18,4 +18,28 @@ public class Cadastro {
         this.valorSugerido = valorSugerido;
         this.cliente = cliente;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public Long getTelefone() {
+        return telefone;
+    }
+
+    public LocalDate getDtNascimento() {
+        return dtNascimento;
+    }
+
+    public double getValorSugerido() {
+        return valorSugerido;
+    }
+
+    public boolean isCliente() {
+        return cliente;
+    }
 }
