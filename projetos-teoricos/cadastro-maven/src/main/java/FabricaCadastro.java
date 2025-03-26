@@ -13,12 +13,12 @@ public class FabricaCadastro {
         Properties props = new Properties();
         props.setProperty("user", "postgres");
         props.setProperty("password", "1011");
-        Connection conn = DriverManager.getConnection(url, props);
+        conexao = DriverManager.getConnection(url, props);
       }
       System.out.println("conexao realizada");
     } catch (Exception e) {
       e.printStackTrace();
-      ;
+
     }
   }
 
