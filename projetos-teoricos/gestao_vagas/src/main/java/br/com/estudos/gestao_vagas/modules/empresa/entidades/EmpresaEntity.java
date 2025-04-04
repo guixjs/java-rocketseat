@@ -1,4 +1,4 @@
-package br.com.estudos.gestao_vagas.modules.candidato;
+package br.com.estudos.gestao_vagas.modules.empresa.entidades;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,18 +10,19 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data //annotation do lombok para criar os getters e setters
-@Entity(name = "candidato")
-public class CandidatoEntity {
 
+@Entity(name="empresa")
+@Data
+public class EmpresaEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID id ;
+  private UUID id;
   private String name;
-
+  
   @NotBlank()
   @Pattern(regexp = "\\S+" ,message = "O campo username não deve conter espaços")
   private String username;
@@ -31,10 +32,13 @@ public class CandidatoEntity {
 
   @Length(min = 6,max = 12,message = "A senha deve ter de 6 a 12 dígitos")
   private String password;
+  private String website;
   private String description;
-  private String curriculum;
 
   @CreationTimestamp
   private LocalDateTime created_at;
 
+
 }
+
+
