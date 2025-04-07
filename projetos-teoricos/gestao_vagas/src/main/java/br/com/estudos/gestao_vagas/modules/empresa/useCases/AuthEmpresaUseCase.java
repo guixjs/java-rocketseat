@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Service
 public class AuthEmpresaUseCase {
 
@@ -34,10 +37,11 @@ public class AuthEmpresaUseCase {
     var verificacaoSenha = this.passwordEncoder.matches(authEmpresaDTO.getPassword(),empresa.getPassword());
 
     if(!verificacaoSenha){
-      throw new BadCredentialsException("Senha inválida.");
+      throw new BadCredentialsException("Usuário ou senha inválida.");
     }
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var token = JWT.create().withIssuer("javagas")
+        .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
         .withSubject((empresa.getId()).toString())
         .sign(algorithm);
 
