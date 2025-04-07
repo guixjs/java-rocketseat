@@ -1,9 +1,6 @@
 package br.com.estudos.gestao_vagas.modules.empresa.entidades;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -22,15 +19,17 @@ public class EmpresaEntity {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
   private String name;
-  
+
+  @Column(unique = true)
   @NotBlank()
   @Pattern(regexp = "\\S+" ,message = "O campo username não deve conter espaços")
   private String username;
 
+  @Column(unique = true)
   @Email(message = "O campo deve conter um email válido")
   private String email;
 
-  @Length(min = 6,max = 12,message = "A senha deve ter de 6 a 12 dígitos")
+  @Length(min = 6,max = 100,message = "A senha deve ter de 6 a 12 dígitos")
   private String password;
   private String website;
   private String description;

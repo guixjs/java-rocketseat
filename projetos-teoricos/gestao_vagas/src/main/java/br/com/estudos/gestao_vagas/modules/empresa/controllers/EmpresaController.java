@@ -19,7 +19,7 @@ public class EmpresaController {
   private CriarEmpresaUseCase criarEmpresaUseCase;
 
   @PostMapping("/")
-  public ResponseEntity<Object> create(@Valid@RequestBody EmpresaEntity empresa){
+  public ResponseEntity<Object> create(@Valid @RequestBody EmpresaEntity empresa){
     try {
       var result = this.criarEmpresaUseCase.execute(empresa);
       return ResponseEntity.ok().body(result);
