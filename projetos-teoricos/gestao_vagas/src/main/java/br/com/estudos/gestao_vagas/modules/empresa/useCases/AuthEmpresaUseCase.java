@@ -29,8 +29,8 @@ public class AuthEmpresaUseCase {
   private PasswordEncoder passwordEncoder;
 
   public String execute(AuthEmpresaDTO authEmpresaDTO){
-    var empresa = this.empresaRepository.findByUsername(authEmpresaDTO.getUsername()).orElseThrow(
-        ()->{
+    var empresa = this.empresaRepository.findByUsername(authEmpresaDTO.getUsername())
+        .orElseThrow(()->{
           throw new UsernameNotFoundException("Empresa não encontrada");
         }
     );
