@@ -1,7 +1,5 @@
 package br.com.estudos.gestao_vagas.modules.empresa.useCases;
 
-import org.springframework.security.core.AuthenticationException;
-
 import org.springframework.security.authentication.BadCredentialsException;
 import br.com.estudos.gestao_vagas.modules.empresa.dto.AuthEmpresaDTO;
 import br.com.estudos.gestao_vagas.modules.empresa.repositories.EmpresaRepository;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+
 
 @Service
 public class AuthEmpresaUseCase {
@@ -43,6 +42,7 @@ public class AuthEmpresaUseCase {
     var token = JWT.create().withIssuer("javagas")
         .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
         .withSubject((empresa.getId()).toString())
+//        .withClaim("roles", Arrays.asList("EMPRESA"))
         .sign(algorithm);
 
     return token;
