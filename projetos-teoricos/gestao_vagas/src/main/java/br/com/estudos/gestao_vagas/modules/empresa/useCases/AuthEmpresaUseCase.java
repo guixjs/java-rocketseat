@@ -1,5 +1,6 @@
 package br.com.estudos.gestao_vagas.modules.empresa.useCases;
 
+import br.com.estudos.gestao_vagas.modules.empresa.dto.AuthEmpresaResponseDTO;
 import org.springframework.security.authentication.BadCredentialsException;
 import br.com.estudos.gestao_vagas.modules.empresa.dto.AuthEmpresaDTO;
 import br.com.estudos.gestao_vagas.modules.empresa.repositories.EmpresaRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 
 
 @Service
@@ -27,7 +29,7 @@ public class AuthEmpresaUseCase {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public String execute(AuthEmpresaDTO authEmpresaDTO){
+  public AuthEmpresaResponseDTO execute(AuthEmpresaDTO authEmpresaDTO){
     var empresa = this.empresaRepository.findByUsername(authEmpresaDTO.getUsername())
         .orElseThrow(()->{
           throw new UsernameNotFoundException("Empresa não encontrada");
@@ -42,10 +44,14 @@ public class AuthEmpresaUseCase {
     var token = JWT.create().withIssuer("javagas")
         .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
         .withSubject((empresa.getId()).toString())
-//        .withClaim("roles", Arrays.asList("EMPRESA"))
+        .withClaim("roles", Arrays.asList("EMPRESA"))
         .sign(algorithm);
 
-    return token;
+    var expiresIn = Instant.now().plus(Duration.ofHours(2));
+    return AuthEmpresaResponseDTO.builder()
+        .acess_token(token)
+        .expires_in(expiresIn.toEpochMilli())
+        .build();
 
   }
 

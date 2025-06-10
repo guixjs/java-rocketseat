@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/vaga")
+@RequestMapping("/empresa/vaga")
 public class VagaController {
 
   @Autowired
   private CriarVagaUseCase criarVagaUseCase;
 
   @PostMapping("/")
+  @PreAuthorize("hasRole('EMPRESA')")
   public VagasEntity create(@Valid@RequestBody CriarVagaDTO vagaDTO, HttpServletRequest request){
     var idDaEmpresa = request.getAttribute("id_empresa");
 
