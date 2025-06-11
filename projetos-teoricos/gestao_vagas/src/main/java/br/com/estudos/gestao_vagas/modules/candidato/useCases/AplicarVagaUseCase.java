@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import br.com.estudos.gestao_vagas.exceptions.UserNotFoundException;
 import br.com.estudos.gestao_vagas.exceptions.VagaNotFoundException;
 import br.com.estudos.gestao_vagas.modules.candidato.CandidatoRepository;
+import br.com.estudos.gestao_vagas.modules.candidato.model.AplicarVagaEntity;
+import br.com.estudos.gestao_vagas.modules.candidato.repository.AplicarVagaRepository;
 import br.com.estudos.gestao_vagas.modules.empresa.repositories.VagaRepository;
 
 @Service
@@ -19,7 +21,10 @@ public class AplicarVagaUseCase {
   @Autowired
   private VagaRepository vagaRepository;
 
-  public void execute(UUID idCandidato, UUID idVaga){
+  @Autowired
+  private AplicarVagaRepository aplicarVagaRepository;
+
+  public AplicarVagaEntity execute(UUID idCandidato, UUID idVaga){
     this.candidatoRepository.findById(idCandidato)
     .orElseThrow(()->{
       throw new UserNotFoundException();
@@ -30,6 +35,12 @@ public class AplicarVagaUseCase {
     .orElseThrow(()->{
       throw new VagaNotFoundException();
     });
-  }
 
+    var aplicarVaga = AplicarVagaEntity.builder()
+    .idCandidato(idCandidato)
+    .idVaga(idVaga)
+    .build();
+    aplicarVaga = aplicarVagaRepository.save(aplicarVaga);
+    return aplicarVaga;
+  }
 }

@@ -1,6 +1,9 @@
 package br.com.estudos.gestao_vagas.modules.candidato.useCase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -17,7 +20,10 @@ import br.com.estudos.gestao_vagas.exceptions.UserNotFoundException;
 import br.com.estudos.gestao_vagas.exceptions.VagaNotFoundException;
 import br.com.estudos.gestao_vagas.modules.candidato.CandidatoEntity;
 import br.com.estudos.gestao_vagas.modules.candidato.CandidatoRepository;
+import br.com.estudos.gestao_vagas.modules.candidato.model.AplicarVagaEntity;
+import br.com.estudos.gestao_vagas.modules.candidato.repository.AplicarVagaRepository;
 import br.com.estudos.gestao_vagas.modules.candidato.useCases.AplicarVagaUseCase;
+import br.com.estudos.gestao_vagas.modules.empresa.entidades.VagasEntity;
 import br.com.estudos.gestao_vagas.modules.empresa.repositories.VagaRepository;
 
 
@@ -32,6 +38,10 @@ public class AplicarVagaUseCaseTest {
 
   @Mock
   private VagaRepository vagaRepository;
+
+  @Mock
+  private AplicarVagaRepository aplicarVagaRepository;
+
 
 
   @Test
@@ -59,5 +69,34 @@ public class AplicarVagaUseCaseTest {
 
   }
   
+  @Test
+  public void should_be_able_to_create_a_new_apply_job(){
+    var idCandidato = UUID.randomUUID();
+    var idVaga = UUID.randomUUID();
+
+    var aplicarVaga = AplicarVagaEntity.builder()
+      .idCandidato(idCandidato)
+      .idVaga(idVaga)
+      .build();
+
+    new AplicarVagaEntity();
+    var applyJobCreated = AplicarVagaEntity.builder()
+      .id(UUID.randomUUID())
+      .build();
+
+    aplicarVaga.setId(UUID.randomUUID());
+
+    when(candidatoRepository.findById(idCandidato)).thenReturn(Optional.of(new CandidatoEntity()));
+    when(vagaRepository.findById(idVaga)).thenReturn(Optional.of(new VagasEntity()));
+    when(aplicarVagaRepository.save(any(AplicarVagaEntity.class))).thenReturn(applyJobCreated);
+
+
+    var resultado = aplicarVagaUseCase.execute(idCandidato, idVaga);
+
+    assertThat(resultado).hasFieldOrProperty("id");
+    assertNotNull(resultado.getId());
+    
+  }
+
 }
   

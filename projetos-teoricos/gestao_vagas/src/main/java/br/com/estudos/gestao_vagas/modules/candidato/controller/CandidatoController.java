@@ -2,6 +2,7 @@ package br.com.estudos.gestao_vagas.modules.candidato.controller;
 
 import br.com.estudos.gestao_vagas.modules.candidato.CandidatoEntity;
 import br.com.estudos.gestao_vagas.modules.candidato.dto.PerfilCandidateResponseDTO;
+import br.com.estudos.gestao_vagas.modules.candidato.useCases.AplicarVagaUseCase;
 import br.com.estudos.gestao_vagas.modules.candidato.useCases.CriarCandidatoUseCase;
 import br.com.estudos.gestao_vagas.modules.candidato.useCases.ListarVagasPorFiltroUseCase;
 import br.com.estudos.gestao_vagas.modules.candidato.useCases.PerfilCandidatoUseCase;
@@ -37,6 +38,9 @@ public class CandidatoController {
 
   @Autowired
   private ListarVagasPorFiltroUseCase listarVagasPorFiltroUseCase;
+  
+  @Autowired
+  private AplicarVagaUseCase aplicarVagaUseCase;
 
   @Operation(summary = "Cadastro de candidatos",
       description = "Responsável por cadastrar um candidato")
@@ -62,7 +66,7 @@ public class CandidatoController {
   }
 
   @GetMapping("/")
-  @PreAuthorize("hasRole('CANDIDATE')")
+  @PreAuthorize("hasRole('CANDIDATO')")
   @Operation(summary = "Listagem de vagas disponíveis para o candidato",
       description = "Responsável por retornar as informações do perfil do candidato")
   @ApiResponses({
@@ -102,6 +106,24 @@ public class CandidatoController {
   @SecurityRequirement(name = "jwt_auth")
   public List<VagasEntity> findJobFilter(@RequestParam String filter){
     return this.listarVagasPorFiltroUseCase.execute(filter);
+
+  }
+
+
+  @PostMapping("/job/apply")
+  @PreAuthorize("hasRole('CANDIDATO')")
+  @Operation(summary = "Inscrição do candidato em uma vaga"
+  ,description = "Endpoint responsável por realizar a inscrição do candidato em uma vaga")
+  @SecurityRequirement(name = "jwt_auth")
+  public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idVaga){
+    var idUser = request.getAttribute("candidato_id");
+
+    try{
+      var resultado = this.aplicarVagaUseCase.execute(UUID.fromString(idUser.toString()), UUID.fromString(idVaga.toString()));
+      return ResponseEntity.ok().body(resultado);
+    }catch(Exception e){
+      return ResponseEntity.badRequest().body(e.getMessage()); 
+    }
 
   }
 }
