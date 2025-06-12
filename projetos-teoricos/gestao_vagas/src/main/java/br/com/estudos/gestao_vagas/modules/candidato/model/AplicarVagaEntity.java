@@ -30,13 +30,13 @@ public class AplicarVagaEntity {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
-  @ManyToOne
-  @JoinColumn(name = "candidato_id",insertable = false,nullable = false)
-  private CandidatoEntity candidatoEntity;
+  // @ManyToOne
+  // @JoinColumn(name = "candidato_id",insertable = false,nullable = false)
+  // private CandidatoEntity candidatoEntity;
   
-  @ManyToOne
-  @JoinColumn(name = "vaga_id",insertable = false,nullable = false)
-  private VagasEntity vagasEntity;
+  // @ManyToOne
+  // @JoinColumn(name = "vaga_id",insertable = false,nullable = false)
+  // private VagasEntity vagasEntity;
 
   @Column(name = "candidato_id")
   private UUID idCandidato;
