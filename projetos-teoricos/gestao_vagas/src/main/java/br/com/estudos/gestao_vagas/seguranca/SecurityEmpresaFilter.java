@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class  SecurityFilter extends OncePerRequestFilter {
+public class  SecurityEmpresaFilter extends OncePerRequestFilter {
 
   @Autowired
   private JWTProvider jwtProvider;
