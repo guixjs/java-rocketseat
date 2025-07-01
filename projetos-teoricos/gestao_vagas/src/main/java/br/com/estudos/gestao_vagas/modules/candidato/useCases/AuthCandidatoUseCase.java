@@ -41,7 +41,7 @@ public class AuthCandidatoUseCase {
       throw new AuthenticationException();
     }
 
-    var roles = Arrays.asList("CANDIDATE");
+    var roles = Arrays.asList("CANDIDATO");
 
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
     var expries_in = Instant.now().plus(Duration.ofMinutes(20));
