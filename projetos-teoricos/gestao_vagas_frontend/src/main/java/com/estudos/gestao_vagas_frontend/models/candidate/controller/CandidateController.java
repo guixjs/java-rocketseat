@@ -107,6 +107,11 @@ public class CandidateController {
     return "redirect:candidate/jobs";
   }
 
+  @GetMapping("/create")
+  public String create() {
+    return "candidate/create";
+  }
+
   private String getToken() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     return authentication.getDetails().toString();
