@@ -38,28 +38,22 @@ public class CandidatoController {
 
   @Autowired
   private ListarVagasPorFiltroUseCase listarVagasPorFiltroUseCase;
-  
+
   @Autowired
   private AplicarVagaUseCase aplicarVagaUseCase;
 
-  @Operation(summary = "Cadastro de candidatos",
-      description = "Responsável por cadastrar um candidato")
+  @Operation(summary = "Cadastro de candidatos", description = "Responsável por cadastrar um candidato")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {
-          @Content(
-              array = @ArraySchema(
-                  schema = @Schema(implementation = PerfilCandidateResponseDTO.class)
-              )
-          )}
-      )
-      ,@ApiResponse(responseCode = "400", description = "User already exists")
+          @Content(array = @ArraySchema(schema = @Schema(implementation = PerfilCandidateResponseDTO.class))) }),
+      @ApiResponse(responseCode = "400", description = "User already exists")
   })
   @PostMapping("/")
-  public ResponseEntity<Object> create(@Valid @RequestBody CandidatoEntity candidato){
+  public ResponseEntity<Object> create(@Valid @RequestBody CandidatoEntity candidato) {
     try {
-      var result =this.criarCandidatoUseCase.execute(candidato);
+      var result = this.criarCandidatoUseCase.execute(candidato);
       return ResponseEntity.ok().body(result);
-    }catch (Exception e){
+    } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
 
@@ -67,62 +61,52 @@ public class CandidatoController {
 
   @GetMapping("/")
   @PreAuthorize("hasRole('CANDIDATO')")
-  @Operation(summary = "Listagem de vagas disponíveis para o candidato",
-      description = "Responsável por retornar as informações do perfil do candidato")
+  @Operation(summary = "Listagem de vagas disponíveis para o candidato", description = "Responsável por retornar as informações do perfil do candidato")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {
-          @Content(
-              array = @ArraySchema(
-                  schema = @Schema(implementation = PerfilCandidateResponseDTO.class)
-              )
-          )}
-      )
-      ,@ApiResponse(responseCode = "400", description = "User not found")
+          @Content(array = @ArraySchema(schema = @Schema(implementation = PerfilCandidateResponseDTO.class))) }),
+      @ApiResponse(responseCode = "400", description = "User not found")
   })
-  public ResponseEntity<Object> get(HttpServletRequest request){
+  public ResponseEntity<Object> get(HttpServletRequest request) {
     var idUser = request.getAttribute("candidato_id");
     try {
 
       var perfil = this.perfilCandidatoUseCase.execute(UUID.fromString(idUser.toString()));
       return ResponseEntity.ok().body(perfil);
-    }catch (Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
+  // teste
   @GetMapping("/job")
   @PreAuthorize("hasRole('CANDIDATO')")
-  @Operation(summary = "Listagem de vagas disponíveis para o candidato",description = "Lista de vagas")
+  @Operation(summary = "Listagem de vagas disponíveis para o candidato", description = "Lista de vagas")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {
-          @Content(
-              array = @ArraySchema(
-                  schema = @Schema(implementation = VagasEntity.class)
-              )
-          )
+          @Content(array = @ArraySchema(schema = @Schema(implementation = VagasEntity.class)))
       })
   })
   @SecurityRequirement(name = "jwt_auth")
-  public List<VagasEntity> findJobFilter(@RequestParam String filter){
+  public List<VagasEntity> findJobFilter(@RequestParam String filter) {
     return this.listarVagasPorFiltroUseCase.execute(filter);
 
   }
 
-
   @PostMapping("/job/apply")
   @PreAuthorize("hasRole('CANDIDATO')")
-  @Operation(summary = "Inscrição do candidato em uma vaga"
-  ,description = "Endpoint responsável por realizar a inscrição do candidato em uma vaga")
+  @Operation(summary = "Inscrição do candidato em uma vaga", description = "Endpoint responsável por realizar a inscrição do candidato em uma vaga")
   @SecurityRequirement(name = "jwt_auth")
-  public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idVaga){
+  public ResponseEntity<Object> applyJob(HttpServletRequest request, @RequestBody UUID idVaga) {
     var idUser = request.getAttribute("candidato_id");
 
-    try{
-      var resultado = this.aplicarVagaUseCase.execute(UUID.fromString(idUser.toString()), UUID.fromString(idVaga.toString()));
+    try {
+      var resultado = this.aplicarVagaUseCase.execute(UUID.fromString(idUser.toString()),
+          UUID.fromString(idVaga.toString()));
       return ResponseEntity.ok().body(resultado);
-    }catch(Exception e){
-      return ResponseEntity.badRequest().body(e.getMessage()); 
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
 
   }
