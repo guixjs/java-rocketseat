@@ -9,27 +9,27 @@
 </head>
 
 <body class="bg-gray-900 h-screen items-center flex justify-center">
-  <form id="submitForm" class="flex gap-24" th:action="@{/candidate/signIn}" method="post">
+  <form id="submitForm" class="flex gap-24" th:action="@{/candidate/create}" method="post" th:object="${candidate}">
     <div class="space-y-8 bg-zinc-950 rounded-md p-10">
       <p class="text-white">Candidato, crie seu cadastro gratuitamente</p>
 
       <input type="text" name="username"
         class="bg-gray-50 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring:green-600 focus:ring-2"
-        placeholder="usuario">
+        placeholder="usuario" th:field="*{username}">
 
 
       <input type="email" name="email"
         class="bg-gray-50 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring:green-600 focus:ring-2"
-        placeholder="E-mail">
+        placeholder="E-mail" th:field="*{email}">
 
 
       <input type="text" name="name"
         class="bg-gray-50 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring:green-600 focus:ring-2"
-        placeholder="Digite seu nome">
+        placeholder="Digite seu nome" th:field="*{name}">
 
       <input type="password" name="password" id="password"
         class="bg-gray-50 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring:green-600 focus:ring-2"
-        placeholder="password">
+        placeholder="password" th:field="*{password}">
 
       <input type="password" name="confirmPassword" id="confirmPassword"
         class="bg-gray-50 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring:green-600 focus:ring-2"
@@ -37,7 +37,7 @@
 
       <textarea name="descripton"
         class="bg-gray-50 text-gray-900 text-xd rounded w-96 block p-3 focus:outline-none focus:ring:green-600 focus:ring-2"
-        placeholder="Breve descrição"></textarea>
+        placeholder="Breve descrição" th:field="*{descripton}"></textarea>
 
       <p class="text-red-400 hidden" id="password_error">As senhas são diferentes</p>
       <button class="bg-green-900 w-96 p-4 rounded text-white hover:bg-green-700" type="submit">Criar</button>
