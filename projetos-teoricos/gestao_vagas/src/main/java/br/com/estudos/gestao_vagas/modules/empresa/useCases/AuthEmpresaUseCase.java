@@ -16,7 +16,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 
-
 @Service
 public class AuthEmpresaUseCase {
 
@@ -29,15 +28,14 @@ public class AuthEmpresaUseCase {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public AuthEmpresaResponseDTO execute(AuthEmpresaDTO authEmpresaDTO){
+  public AuthEmpresaResponseDTO execute(AuthEmpresaDTO authEmpresaDTO) {
     var empresa = this.empresaRepository.findByUsername(authEmpresaDTO.getUsername())
-        .orElseThrow(()->{
+        .orElseThrow(() -> {
           throw new UsernameNotFoundException("Empresa não encontrada");
-        }
-    );
-    var verificacaoSenha = this.passwordEncoder.matches(authEmpresaDTO.getPassword(),empresa.getPassword());
+        });
+    var verificacaoSenha = this.passwordEncoder.matches(authEmpresaDTO.getPassword(), empresa.getPassword());
 
-    if(!verificacaoSenha){
+    if (!verificacaoSenha) {
       throw new BadCredentialsException("Usuário ou senha inválida.");
     }
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
@@ -47,10 +45,13 @@ public class AuthEmpresaUseCase {
         .withClaim("roles", Arrays.asList("EMPRESA"))
         .sign(algorithm);
 
+    var roles = Arrays.asList("EMPRESA");
+
     var expiresIn = Instant.now().plus(Duration.ofHours(2));
     return AuthEmpresaResponseDTO.builder()
         .acess_token(token)
         .expires_in(expiresIn.toEpochMilli())
+        .roles(roles)
         .build();
 
   }

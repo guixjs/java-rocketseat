@@ -20,6 +20,6 @@ public class CreateCandidateService {
 
     HttpEntity<CreateCandidateDTO> request = new HttpEntity<>(createCandidateDTO, headers);
 
-    var result = rt.postForObject("http://localhost:8080/candidato/", request, String.class);
+    rt.postForObject("http://localhost:8080/candidato/", request, String.class);
   }
 }
