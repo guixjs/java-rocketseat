@@ -36,8 +36,8 @@ public class VagasEntity {
   @JoinColumn(name = "id_empresa", insertable = false, updatable = false)
   private EmpresaEntity empresaEntity;
 
-  @Column(name = "id_empresa",nullable = false)
-  private UUID id_empresa;
+  @Column(name = "id_empresa", nullable = false)
+  private UUID idEmpresa;
 
   @CreationTimestamp
   private LocalDateTime created_at;

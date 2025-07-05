@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface VagaRepository extends JpaRepository<VagasEntity, UUID> {
 
   List<VagasEntity> findByDescriptionContainingIgnoreCase(String description);
+
+  List<VagasEntity> findByIdEmpresa(UUID idEmpresa);
 }

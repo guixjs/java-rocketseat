@@ -19,6 +19,7 @@ import com.estudos.gestao_vagas_frontend.models.company.dto.CreateCompanyDTO;
 import com.estudos.gestao_vagas_frontend.models.company.dto.CreateJobDTO;
 import com.estudos.gestao_vagas_frontend.models.company.service.CreateCompanyService;
 import com.estudos.gestao_vagas_frontend.models.company.service.CreateJobService;
+import com.estudos.gestao_vagas_frontend.models.company.service.ListAllJobsCompanyService;
 import com.estudos.gestao_vagas_frontend.models.company.service.LoginCompanyService;
 import com.estudos.gestao_vagas_frontend.utils.FormatErrorMessage;
 
@@ -36,6 +37,9 @@ public class CompanyController {
 
   @Autowired
   private CreateJobService createJobService;
+
+  @Autowired
+  private ListAllJobsCompanyService listAllJobsCompanyService;
 
   @GetMapping("/create")
   public String create(Model model) {
@@ -96,6 +100,14 @@ public class CompanyController {
   public String createJobs(CreateJobDTO jobs) {
     this.createJobService.execute(jobs, getToken());
     return "redirect:/company/jobs";
+  }
+
+  @GetMapping("/jobs/list")
+  @PreAuthorize("hasRole('EMPRESA')")
+  public String list(Model model) {
+    var result = this.listAllJobsCompanyService.execute(getToken());
+    model.addAttribute("jobs", result);
+    return "company/list";
   }
 
   private String getToken() {

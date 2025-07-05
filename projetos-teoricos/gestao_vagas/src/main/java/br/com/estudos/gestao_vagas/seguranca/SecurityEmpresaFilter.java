@@ -16,20 +16,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class  SecurityEmpresaFilter extends OncePerRequestFilter {
+public class SecurityEmpresaFilter extends OncePerRequestFilter {
 
   @Autowired
   private JWTProvider jwtProvider;
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
     String header = request.getHeader("Authorization");
 
-
-    if(request.getRequestURI().startsWith("/empresa")){
-      if(header != null){
+    if (request.getRequestURI().startsWith("/empresa")) {
+      if (header != null) {
         var token = this.jwtProvider.validaToken(header);
-        if(token == null){
+        if (token == null) {
           response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
           return;
         }
@@ -38,15 +38,15 @@ public class  SecurityEmpresaFilter extends OncePerRequestFilter {
 
         var grants = roles.stream()
             .map(
-                role-> new SimpleGrantedAuthority("ROLE_"+role.toString().toUpperCase()))
+                role -> new SimpleGrantedAuthority("ROLE_" + role.toString().toUpperCase()))
             .toList();
-        request.setAttribute("id_empresa",token.getSubject());
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken
-            (token.getSubject(),null, grants);
+        request.setAttribute("idEmpresa", token.getSubject());
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(token.getSubject(), null,
+            grants);
         SecurityContextHolder.getContext().setAuthentication(auth);
       }
     }
 
-    filterChain.doFilter(request,response);
+    filterChain.doFilter(request, response);
   }
 }

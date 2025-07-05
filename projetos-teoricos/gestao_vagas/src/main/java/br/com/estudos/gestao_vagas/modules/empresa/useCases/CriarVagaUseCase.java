@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CriarVagaUseCase{
+public class CriarVagaUseCase {
 
   @Autowired
   private VagaRepository vagaRepository;
@@ -16,9 +16,9 @@ public class CriarVagaUseCase{
   @Autowired
   private EmpresaRepository empresaRepository;
 
-  public VagasEntity execute(VagasEntity vaga){
+  public VagasEntity execute(VagasEntity vaga) {
 
-    empresaRepository.findById(vaga.getId_empresa()).orElseThrow(()->{
+    empresaRepository.findById(vaga.getIdEmpresa()).orElseThrow(() -> {
       throw new EmpresaNotFoundException();
     });
     return this.vagaRepository.save(vaga);
